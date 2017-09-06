@@ -72,7 +72,6 @@ def split_chat(chat, users):
 
 def bin_time(t, n_bin=8):
     """bin time in the day to number of bins"""
-    t = t.replace('24:', '00:')
     bin_size = int(24./n_bin)
     h = parser.parse(t).hour
     for i in range(n_bin + 1):
