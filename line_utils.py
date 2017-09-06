@@ -20,9 +20,20 @@ def read_line_chat(file_name):
     chats = list(lines)
     chats = [c[0] for c in chats if len(c) > 0]
     chats_dict = defaultdict(list)
+    is_found_first_date = False
     for chat in chats:
         date = re.findall(r'\d+\.\d+\.\d+', chat)
+        
+        #Android date format
+        if len(date) == 0:
+            date = re.findall('\d+\/\d+\/\d+', chat)
+        
+        #Skip line until found date
+        if is_found_first_date == False and len(date) == 0:
+            continue
+            
         if len(date) >= 1:
+            is_found_first_date = True
             d = date[0]
         else:
             chats_dict['chats'].append([d, chat])
@@ -60,6 +71,7 @@ def split_chat(chat, users):
 
 def bin_time(t, n_bin=8):
     """bin time in the day to number of bins"""
+    t = t.replace('24:', '00:')
     bin_size = int(24./n_bin)
     h = parser.parse(t).hour
     for i in range(n_bin + 1):
@@ -256,7 +268,9 @@ def plot_response_rate(chats_dict):
     users_response = []
     for responses in responses_all:
         time_previous, user_previous = responses[0]
+        time_previous = time_previous.replace('24:', '00:')
         for i in range(1, len(responses)):
+            responses[i][0] = responses[i][0].replace('24:', '00:')
             if user_previous == responses[i][1]:
                 time_previous, user_previous = responses[i]
             else:
