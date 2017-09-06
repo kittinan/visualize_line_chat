@@ -36,6 +36,7 @@ def read_line_chat(file_name):
             is_found_first_date = True
             d = date[0]
         else:
+            chat = re.sub('^24:', '00:', chat)
             chats_dict['chats'].append([d, chat])
     chats_dict['total_chats'] = len(chats_dict['chats'])
     return chats_dict
@@ -268,9 +269,7 @@ def plot_response_rate(chats_dict):
     users_response = []
     for responses in responses_all:
         time_previous, user_previous = responses[0]
-        time_previous = time_previous.replace('24:', '00:')
         for i in range(1, len(responses)):
-            responses[i][0] = responses[i][0].replace('24:', '00:')
             if user_previous == responses[i][1]:
                 time_previous, user_previous = responses[i]
             else:
