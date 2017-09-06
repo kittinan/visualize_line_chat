@@ -21,7 +21,8 @@ def read_line_chat(file_name):
     chats = [c[0] for c in chats if len(c) > 0]
     chats_dict = defaultdict(list)
     for chat in chats:
-        date = re.findall(r'\d+\.\d+\.\d+', chat)
+        #date = re.findall(r'\d+\.\d+\.\d+', chat)
+        date = re.findall('\d+\/\d+\/\d+', chat)
         if len(date) >= 1:
             d = date[0]
         else:
@@ -60,6 +61,8 @@ def split_chat(chat, users):
 
 def bin_time(t, n_bin=8):
     """bin time in the day to number of bins"""
+    #print(t)
+    t = t.replace('24:', '00:')
     bin_size = int(24./n_bin)
     h = parser.parse(t).hour
     for i in range(n_bin + 1):
@@ -260,6 +263,10 @@ def plot_response_rate(chats_dict):
             if user_previous == responses[i][1]:
                 time_previous, user_previous = responses[i]
             else:
+                #print(responses[i])
+                #print(time_previous)
+                responses[i][0] = responses[i][0].replace('24:', '00:')
+                time_previous = time_previous.replace('24:', '00:')
                 response_time = int((parser.parse(responses[i][0]) - parser.parse(time_previous)).seconds/60.)
                 time_previous, user_previous = responses[i]
                 users_response.append([user_previous, response_time])
