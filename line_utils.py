@@ -26,7 +26,7 @@ def read_line_chat(file_name):
         
         #Android date format
         if len(date) == 0:
-            date = re.findall('\d+\/\d+\/\d+', chat)
+            date = re.findall('^\d+\/\d+\/\d+', chat)
         
         #Skip line until found date
         if is_found_first_date == False and len(date) == 0:
